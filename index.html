@@ -1,0 +1,36 @@
+<!DOCTYPE html>
+<html lang="hi">
+<head>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1.0">
+<title>Shri Ram Cafe Order</title>
+<style>
+body{font-family:Arial;background:#fff8ed;margin:0;padding:20px}
+h1{color:#a52a2a;text-align:center}
+.box{background:white;padding:18px;border-radius:12px;max-width:450px;margin:auto;box-shadow:0 2px 10px #ddd}
+input,select,textarea,button{width:100%;padding:12px;margin:8px 0;box-sizing:border-box;font-size:16px}
+button{background:#198754;color:white;border:0;border-radius:8px;font-weight:bold}
+</style>
+</head>
+<body>
+<div class="box">
+<h1>श्री राम कैफे एंड रेस्टोरेंट</h1>
+<p style="text-align:center">अतरसुइया, प्रयागराज</p>
+<h3>ऑर्डर बुक करें</h3>
+<form onsubmit="sendOrder(event)">
+<input id="name" placeholder="आपका नाम" required>
+<input id="phone" placeholder="मोबाइल नंबर" required>
+<textarea id="address" placeholder="पूरा पता" required></textarea>
+<textarea id="items" placeholder="क्या-क्या मंगाना है?" required></textarea>
+<button type="submit">WhatsApp पर ऑर्डर भेजें</button>
+</form>
+</div>
+<script>
+function sendOrder(e){
+e.preventDefault();
+let msg="नया ऑर्डर - श्री राम कैफे%0Aनाम: "+encodeURIComponent(document.getElementById('name').value)+"%0Aमोबाइल: "+encodeURIComponent(document.getElementById('phone').value)+"%0Aपता: "+encodeURIComponent(document.getElementById('address').value)+"%0Aऑर्डर: "+encodeURIComponent(document.getElementById('items').value);
+window.location.href="https://wa.me/919670756655?text="+msg;
+}
+</script>
+</body>
+</html>
