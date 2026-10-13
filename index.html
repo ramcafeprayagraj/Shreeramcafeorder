@@ -1,36 +1,54 @@
-<!DOCTYPE html>
+<!doctype html>
 <html lang="hi">
 <head>
-<meta charset="UTF-8">
-<meta name="viewport" content="width=device-width, initial-scale=1.0">
-<title>Shri Ram Cafe Order</title>
+<meta charset="utf-8"><meta name="viewport" content="width=device-width,initial-scale=1">
+<title>श्री राम कैफे एंड रेस्टोरेंट - ऑर्डर मेन्यू</title>
 <style>
-body{font-family:Arial;background:#fff8ed;margin:0;padding:20px}
-h1{color:#a52a2a;text-align:center}
-.box{background:white;padding:18px;border-radius:12px;max-width:450px;margin:auto;box-shadow:0 2px 10px #ddd}
-input,select,textarea,button{width:100%;padding:12px;margin:8px 0;box-sizing:border-box;font-size:16px}
-button{background:#198754;color:white;border:0;border-radius:8px;font-weight:bold}
-</style>
-</head>
-<body>
-<div class="box">
-<h1>श्री राम कैफे एंड रेस्टोरेंट</h1>
-<p style="text-align:center">अतरसुइया, प्रयागराज</p>
-<h3>ऑर्डर बुक करें</h3>
-<form onsubmit="sendOrder(event)">
-<input id="name" placeholder="आपका नाम" required>
-<input id="phone" placeholder="मोबाइल नंबर" required>
-<textarea id="address" placeholder="पूरा पता" required></textarea>
-<textarea id="items" placeholder="क्या-क्या मंगाना है?" required></textarea>
-<button type="submit">WhatsApp पर ऑर्डर भेजें</button>
-</form>
+:root{--g:#174d35;--gold:#f5c542;--bg:#f5f6f2}*{box-sizing:border-box}body{margin:0;font-family:Arial,"Noto Sans Devanagari",sans-serif;background:var(--bg);color:#20251f}header{background:var(--g);color:#fff;text-align:center;padding:23px 14px;border-bottom:5px solid var(--gold)}h1{font-size:24px;margin:0 0 8px}header p{margin:5px;font-size:14px}main{max-width:760px;margin:auto;padding:14px}.note{background:#fff5cf;border:1px solid #ead47a;padding:12px;border-radius:12px;font-size:13px;line-height:1.5}.group h2{font-size:18px;color:var(--g);margin:22px 0 9px}.item{background:white;border-radius:12px;margin:8px 0;padding:12px;display:flex;gap:8px;align-items:center;box-shadow:0 1px 4px #0000000c}.detail{flex:1}.name{font-weight:700}.rate{color:#5c665e;font-size:13px;margin-top:4px}.size{padding:8px;border:1px solid #ccd2cc;border-radius:8px;background:white;max-width:120px}.qty{display:flex;align-items:center;gap:7px}.qty button{width:31px;height:32px;border:0;border-radius:8px;background:var(--g);color:white;font-size:20px}.count{min-width:14px;text-align:center}label{display:block;font-size:14px;font-weight:bold;margin:12px 0 5px}input,textarea,select{width:100%;padding:11px;border:1px solid #ccd2cc;border-radius:9px;font:inherit;background:white}.total{background:#fff;border-radius:12px;padding:15px;margin:15px 0;display:flex;justify-content:space-between;font-size:18px;font-weight:bold}.send{width:100%;padding:15px;border:0;border-radius:12px;background:#168447;color:#fff;font-weight:bold;font-size:17px}.small{font-size:12px;color:#68716a;line-height:1.5;margin-top:10px}footer{text-align:center;color:#68716a;padding:20px;font-size:13px}
+</style></head><body>
+<header><h1>श्री राम कैफे एंड रेस्टोरेंट</h1><p>निकट पजावा चौराहा, अतरसुइया, प्रयागराज</p><p>ऑर्डर समय: दोपहर 1 बजे से रात 11 बजे तक</p></header>
+<main><div class="note"><b>श्री राम कैफे का ऑनलाइन मेन्यू</b><br>दोहरे रेट में पहला Half और दूसरा Full है। ऑर्डर भेजने से पहले कृपया चुने गए आइटम और कीमत जाँच लें। अंतिम उपलब्धता और डिलीवरी शुल्क WhatsApp पर कन्फर्म होगा।</div>
+<div id="menu"></div>
+<h2 style="color:var(--g);margin-top:24px">ग्राहक की जानकारी</h2>
+<label>नाम *</label><input id="customer" placeholder="अपना नाम">
+<label>मोबाइल नंबर *</label><input id="phone" inputmode="numeric" placeholder="10 अंकों का मोबाइल नंबर">
+<label>ऑर्डर का प्रकार</label><select id="type"><option>होम डिलीवरी</option><option>रेस्टोरेंट से पिकअप</option></select>
+<label>पूरा पता (होम डिलीवरी के लिए) *</label>
+<div style="display:flex;gap:8px;flex-wrap:wrap;margin-bottom:8px">
+<button type="button" class="send" style="width:auto;padding:10px 12px;font-size:14px" onclick="chooseMap()">🗺️ Google Maps पर पता चुनें</button>
+<button type="button" class="send" style="width:auto;padding:10px 12px;font-size:14px;background:#315c91" onclick="useLocation()">📍 मेरी लोकेशन चुनें</button>
 </div>
+<textarea id="address" rows="2" placeholder="मकान नंबर, मोहल्ला, लैंडमार्क"></textarea>
+<div id="mapStatus" class="small">मैप से जगह चुनने पर Google Maps खुलेगा। वहाँ से शेयर/कॉपी किया हुआ पता यहाँ पेस्ट कर सकते हैं।</div>
+<label>खास निर्देश (वैकल्पिक)</label><textarea id="note" rows="2" placeholder="कम तीखा, बिना प्याज आदि"></textarea>
+<div class="total"><span>खाने का कुल बिल</span><span id="total">₹0</span></div><button class="send" onclick="sendOrder()">WhatsApp पर ऑर्डर भेजें</button>
+<div class="small">यह डेमो ऑर्डर WhatsApp नंबर 9670756655 पर संदेश तैयार करेगा। ग्राहक को WhatsApp में Send दबाना होगा। डिलीवरी शुल्क और अंतिम कीमत फोन पर कन्फर्म की जाएगी।</div>
+</main><footer>श्री राम कैफे एंड रेस्टोरेंट • अतरसुइया, प्रयागराज</footer>
 <script>
-function sendOrder(e){
-e.preventDefault();
-let msg="नया ऑर्डर - श्री राम कैफे%0Aनाम: "+encodeURIComponent(document.getElementById('name').value)+"%0Aमोबाइल: "+encodeURIComponent(document.getElementById('phone').value)+"%0Aपता: "+encodeURIComponent(document.getElementById('address').value)+"%0Aऑर्डर: "+encodeURIComponent(document.getElementById('items').value);
-window.location.href="https://wa.me/919670756655?text="+msg;
-}
-</script>
-</body>
-</html>
+const groups=[
+["MAIN COURSE",[
+["Soya Masala Chaap (Gravy)",200,350],["Soya Malai Chaap (Gravy)",200,350],["Paneer Tikka Masala",180,280],["Kaju Korma",180,280],["Kaju Paneer",200,300],["Kaju Paneer Punjabi Special",250,350],["Shahi Paneer",160,240],["Kadhai Paneer",160,240],["Paneer Kali Mirch",160,260],["Paneer Bhurji",160,260],["Paneer Do Pyaza",160,240],["Paneer Chatnaar",160,240],["Paneer Butter Masala",160,240],["Paneer Lababdar",180,260],["Mushroom Do Pyaza",160,250],["Mushroom Masala",160,250],["Malai Kofta",180,280],["Handi Paneer",180,280],["Mix Veg",120,180],["Matar Paneer",150,220],["Matar Mushroom",160,240],["Aloo Matar Tamatar",100,160],["Aloo Matar Gobhi",100,160],["Jeera Aloo",90,140],["Aloo Do Pyaza",120,170],["Chhola",80,120]]],
+["DAAL & SALAD",[
+["Daal Makhani",120,180],["Plain Daal",100],["Daal Fry",90,120],["Daal Fry Tadka",100,140],["Daal Fry (Desi Ghee)",140,160],["Green Salad",60],["Onion Salad",50],["Raita Mix Veg",50],["Curd",50]]],
+["BREAD",[
+["Tawa Roti",10],["Tawa Roti (Butter)",12],["Aloo Paratha",50],["Paneer Paratha",70],["Tandoori Roti",12],["Butter Roti",15],["Missi Butter Roti",30],["Missi Roti",25],["Plain Naan",35],["Butter Naan",40],["Garlic Naan",45],["Garlic Naan Butter",50],["Stuff Naan Paneer",80],["Stuff Naan Aloo",60],["Paneer Kulcha",80],["Onion Kulcha",50],["Aloo Kulcha / Paratha",60],["Lachha Paratha",30],["Papad Roasted / Fried",10,20]]],
+["RICE & THALI",[
+["Plain Rice",60,100],["Jeera Rice",80,120],["Quarter Rice / Jeera Rice",40,50],["Matar Pulav",170],["Shri Ram Saadi Thali",120],["Shri Ram Paneer Thali",170],["Shri Ram Special Thali",200]]],
+["STARTER / TANDOORI",[
+["Paneer Tikka",120,200],["Paneer Malai Tikka",130,210],["Soya Chaap",100,180],["Soya Malai Chaap",110,200],["Mushroom Tikka",150],["Hara Bhara Kabab",180],["Paneer Papdi",140,200],["Crispy Corn",160]]],
+["CHINESE",[
+["French Fries",120],["Paneer Pakoda",160],["Chilli Potato",120],["Honey Chilli Potato",130],["Veg Noodles",120],["Schezwan Noodles",120],["Paneer Noodles",150],["Singapori Noodles",150],["Shree Ram Special Noodles",200],["Manchurian",100,150],["Chilli Mushroom",120,160],["Chilli Paneer",120,180],["Fried Rice",100,150],["Paneer Fried Rice",160,200],["Schezwan Fried Rice",110,160],["Shree Ram Special Fried Rice",180,220]]],
+["DRINKS",[
+["Chai",30],["Hot Coffee",50],["Cold Drink",40],["Cold Coffee",100],["Cold Coffee with Ice Cream",120],["Chocolate Shake",120],["Oreo Shake",110],["Kit Kat Shake",110]]],
+["SOUTH INDIAN & SWEET",[
+["Paper Dosa",90],["Masala Dosa",140],["Butter Masala Dosa",150],["Cheese Masala Dosa",160],["Paneer Masala Dosa",160],["Shree Ram Special Dosa",200],["Uttapam Onion",90],["Uttapam Cheese",100],["Uttapam Capsicum",90],["Gulab Jamun",30],["Ice Cream with Chocolate Syrup",30]]]
+];
+let all=[],cart={};const root=document.getElementById('menu');
+groups.forEach(([title,items])=>{let sec=document.createElement('section');sec.className='group';let h=document.createElement('h2');h.textContent=title;sec.appendChild(h);items.forEach(([name,half,full])=>{let id=all.length;all.push({name,half,full});cart[id]={qty:0,size:full===undefined?'single':'half'};let el=document.createElement('div');el.className='item';el.innerHTML=`<div class="detail"><div class="name">${name}</div><div class="rate" id="rate${id}"></div></div>${full!==undefined?`<select class="size" aria-label="साइज़"><option value="half">Half ₹${half}</option><option value="full">Full ₹${full}</option></select>`:''}<div class="qty"><button type="button">−</button><span class="count">0</span><button type="button">+</button></div>`;let bs=el.querySelectorAll('button');bs[0].onclick=()=>change(id,-1,el);bs[1].onclick=()=>change(id,1,el);let sel=el.querySelector('select');if(sel)sel.onchange=()=>{cart[id].size=sel.value;update()};el.querySelector(`#rate${id}`).textContent=full===undefined?`₹${half}`:`Half ₹${half} • Full ₹${full}`;sec.appendChild(el);});root.appendChild(sec)});
+function price(i){let x=all[i];return x.full===undefined?x.half:(cart[i].size==='full'?x.full:x.half)}
+function change(i,d,el){cart[i].qty=Math.max(0,cart[i].qty+d);el.querySelector('.count').textContent=cart[i].qty;update()}
+function update(){let sum=all.reduce((s,x,i)=>s+price(i)*cart[i].qty,0);document.getElementById('total').textContent='₹'+sum}
+function chooseMap(){let q=encodeURIComponent(document.getElementById('address').value.trim()||'Shri Ram Cafe, Attarsuiya, Prayagraj');window.open('https://www.google.com/maps/search/?api=1&query='+q,'_blank');document.getElementById('mapStatus').textContent='Google Maps में सही जगह चुनें। फिर वहाँ का पता या शेयर लिंक कॉपी करके ऊपर के पता बॉक्स में पेस्ट करें।'}
+function useLocation(){const status=document.getElementById('mapStatus');if(!navigator.geolocation){status.textContent='इस ब्राउज़र में लोकेशन सुविधा उपलब्ध नहीं है। Google Maps पर पता चुनें या पता खुद लिखें।';return;}status.textContent='आपकी अनुमति का इंतज़ार है…';navigator.geolocation.getCurrentPosition(pos=>{const lat=pos.coords.latitude,lon=pos.coords.longitude;const link='https://www.google.com/maps?q='+lat+','+lon;const box=document.getElementById('address');box.value=(box.value.trim()?box.value.trim()+'\\n':'')+'लोकेशन: '+link;status.textContent='लोकेशन का लिंक पता बॉक्स में जोड़ दिया गया है। चाहें तो मकान नंबर/लैंडमार्क भी लिखें।';},()=>{status.textContent='लोकेशन नहीं मिल सकी। ब्राउज़र में Location permission दें या Google Maps पर पता चुनें।'},{enableHighAccuracy:true,timeout:10000});}
+function sendOrder(){let name=document.getElementById('customer').value.trim(),phone=document.getElementById('phone').value.trim(),type=document.getElementById('type').value,address=document.getElementById('address').value.trim(),note=document.getElementById('note').value.trim();let chosen=all.map((x,i)=>{if(!cart[i].qty)return null;let size=x.full===undefined?'':` (${cart[i].size==='full'?'Full':'Half'})`;return `${x.name}${size} × ${cart[i].qty} = ₹${price(i)*cart[i].qty}`}).filter(Boolean);if(!chosen.length)return alert('कृपया कम से कम एक आइटम चुनें।');if(!name)return alert('कृपया नाम भरें।');if(!/^[6-9]\d{9}$/.test(phone))return alert('सही 10 अंकों का मोबाइल नंबर भरें।');if(type==='होम डिलीवरी'&&!address)return alert('डिलीवरी का पूरा पता भरें।');let sum=all.reduce((s,x,i)=>s+price(i)*cart[i].qty,0);let msg=`नया ऑर्डर - श्री राम कैफे एंड रेस्टोरेंट\nनाम: ${name}\nग्राहक मोबाइल: ${phone}\nप्रकार: ${type}\n${chosen.join('\n')}\nखाने का कुल बिल: ₹${sum}\nपता: ${type==='होम डिलीवरी'?address:'रेस्टोरेंट से पिकअप'}\nनिर्देश: ${note||'कोई नहीं'}\nकृपया ऑर्डर और डिलीवरी चार्ज की पुष्टि करें।`;window.open('https://wa.me/919670756655?text='+encodeURIComponent(msg),'_blank')}
+</script></body></html>
